@@ -1,23 +1,6 @@
 // ‫‪./StoreCalculator.out‬‬ ‫‪commands.txt‬‬ ‫‪assets‬‬
 
-#include<iostream>
-#include <string> 
-#include <stdio.h> 
-#include <string.h> 
-#include <cstring>
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include <bits/stdc++.h> 
-#include <fcntl.h> 
-#include <sys/stat.h> 
-#include <sys/types.h> 
-#include <unistd.h> 
-#include <sys/wait.h>
-
-#define FIFO "fifo"
-#define MSGSIZE 100
-
+#include "tools.h"
 
 using namespace std;
 

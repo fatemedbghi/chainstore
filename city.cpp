@@ -35,17 +35,24 @@ int main(int argc, char** argv)
         pass_to_unnamed_pipe(msg1,"./store.out");
 
     }
-
+    vector<int> prices;
+    cout<<"size: "<<dir.size()<<endl;
     for(int i=0; i<dir.size(); i++){
-        // mkfifo(fifo_arr[i], 0666);
         
         int fd = open(fifo_arr[i],O_RDONLY);
-        if(fd < 0) cout << "error open province : " << strerror( errno )<< endl;
+        if(fd < 0) cout << "error  : " << strerror( errno )<< endl;
         char str[MSGSIZE];
         if (read(fd, str, MSGSIZE)<0) cout<<"read failed"<<i<<"\n";
-        cout<<str<<endl;
+        int temp = atoi(str);
+        prices.push_back(temp);
+        cout<<"hi\n";
+        cout <<str<<endl;
         close(fd);
+        
     }
+    // cout<<prices.size()<<endl;
+    int price = find_min_or_max(prices);
+    // cout<<price<<endl;
 
     return 0;
 }

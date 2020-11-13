@@ -76,7 +76,9 @@ int command(vector<char*> input) {
         i++;
     }
     char* file_name = input[2];
-    return min_or_max(id, start_date, end_date, file_name, flag);
+    int price = min_or_max(id, start_date, end_date, file_name, flag);
+    if (price != -1) return price*10+flag;
+    return price;
 }
 
 int main(int argc, char** argv) 
@@ -87,15 +89,8 @@ int main(int argc, char** argv)
 
     vector<char*> input = split(inbuf);
     int price = command(input);
-    string s = to_string(price);
-    const char *pchar = s.c_str();
-    char kh[100];
-    strcpy(kh, pchar);
-    // mkfifo(input[1], 0666);
-    int fd = open(input[1], O_WRONLY);
-    if(fd < 0) cout << "error open province : " << strerror( errno )<< endl;
-    if (write(fd,kh,MSGSIZE)<0) cout<<"write failed\n";
-    close(fd);
+
+    pass_to_named_pipe(input[1], price);
 
     return 0; 
 }

@@ -62,3 +62,33 @@ vector<char*> split(char inbuf[MSGSIZE]){
     }
     return input;
 }
+
+int find_min_or_max(vector<int> prices) {
+    vector <int> temp;
+    int flag;
+    for (int i=0;i<prices.size();i++) {
+        if (prices[i] != -1) 
+        {
+            flag = prices[i]%10;
+            temp.push_back(prices[i]/10);
+        }
+    }
+    if (temp.size() != 0){
+        if (flag == 0) return *min_element(prices.begin(), prices.end());
+        if (flag == 1) return *max_element(prices.begin(), prices.end());
+    }
+    return -1;
+}
+
+void pass_to_named_pipe(char *name, int price)
+{
+    string s = to_string(price);
+    const char *pchar = s.c_str();
+    char kh[100];
+    strcpy(kh, pchar);
+    int fd = open(name, O_WRONLY);
+    if(fd < 0) cout << "error : " << strerror( errno )<< endl;
+    if (write(fd,kh,MSGSIZE)<0) cout<<"write failed\n";
+    close(fd);
+    cout<<"why"<<endl;
+}

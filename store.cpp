@@ -60,14 +60,35 @@ int min_or_max(int id, char* start_date, char* end_date, char* file_name, int fl
     return -1;
 }
 
-int main() 
+int command(vector<char*> input) {
+    char *token, *start_date, *end_date;
+    char *rest = input[0];
+    int i = 0, flag, id;
+    while ((token = strtok_r(rest, " ", &rest))) 
+    {
+        if (i==0){
+            if (strcmp("MAX", token) == 0) flag = MAX;
+            else flag = MIN;
+        }
+        if (i==1) id = stoi(token);
+        if (i==2) start_date = token;
+        if (i==3) end_date = token;
+        i++;
+    }
+    char* file_name = input[2];
+    return min_or_max(id, start_date, end_date, file_name, flag);
+}
+
+int main(int argc, char** argv) 
 {
-    string str_obj1("2018/11/10");
-    char* char_arr1 = &str_obj1[0];
-    string str_obj2("2020/02/14");
-    char* char_arr2 = &str_obj2[0];
-    string str("PersianShop.csv");
-    char* file_name = &str[0];
-    cout<< min_or_max(0, char_arr1, char_arr2, file_name,1)<<"\n";      
+    char inbuf[MSGSIZE]; 
+    if (read(atoi(argv[0]), inbuf, MSGSIZE) < 0)  cout<<"read failed"<<endl;
+    close(atoi(argv[0]));
+
+    vector<char*> input = split(inbuf);
+    cout<<input[1]<<endl;
+
+    cout << command(input) << endl;
+   
     return 0; 
 }

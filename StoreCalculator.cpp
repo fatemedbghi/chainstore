@@ -9,48 +9,28 @@ int main(int argc, char** argv)
     ifstream file(argv[1]);
     string str;
     int i = 0;
-    vector<string> fifo;
     vector<string> command;
     while (getline(file, str))
     {
         command.push_back(str);
-        string temp = FIFO;
-        temp.append(to_string(i)); 
-        string str_obj(temp);
-        char *myfifo = &str_obj[0];
-        fifo.push_back(&str_obj[0]);
-        mkfifo(myfifo, 0666);
         i++;
     }
 
     for (int j=0; j<i;j++){
-        int p[2];
-        if (pipe(p) < 0) cout<<"pipe faild\n";
-        pid_t pid = fork();
-        if (pid < 0) {
-            cout << "fork faild.\n";
-            exit(1);
-        }
-        else if (pid == 0) {
-            // close(p[0]);
-            close(p[1]);
-            string s = to_string(p[0]);
-            char *pchar = &s[0]; 
-            char* argv[] = {pchar,NULL};
-            execv("./assets.out", argv);
-        }
-        else {
-            // close(p[0]);
-            string msg = command[j];
-            msg.append("#");
-            msg.append(fifo[j]);
-            msg.append("#");
-            msg.append(argv[2]);
-            char* msg1 = &msg[0];
-            if (write(p[1], msg1, MSGSIZE) < 0) cout<<"write failed"<<j<<endl;
-            close(p[1]);
-            wait(NULL);
-        }
+
+        string temp = FIFO;
+        temp.append(to_string(j)); 
+        char *myfifo = &temp[0];
+        mkfifo(myfifo, 0666);
+
+        string msg = command[j];
+        msg.append("#");
+        msg.append(myfifo);
+        msg.append("#");
+        msg.append(argv[2]);
+        char* msg1 = &msg[0];
+
+        pass_to_unnamed_pipe(msg1,"./assets.out");
     }
 
     return 0;

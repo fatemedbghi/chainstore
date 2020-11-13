@@ -17,11 +17,15 @@
 #include <dirent.h> 
 #include<sys/wait.h> 
 
-#define FIFO "fifo"
+#define FIFO "fifo/fifo"
 #define MSGSIZE 100
+#define MAX 1
+#define MIN 0
 
 using namespace std;
 
 vector<string> subdire_or_files(char* path);
+void pass_to_unnamed_pipe(char *msg,string argc);
+vector<char*> split(char inbuf[MSGSIZE]);
 
 #endif

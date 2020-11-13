@@ -12,16 +12,28 @@ int main(int argc, char** argv)
     if (read(atoi(argv[0]), inbuf, MSGSIZE) < 0)  cout<<"read failed"<<endl;
     close(atoi(argv[0]));
 
-    char *token;
-    char *rest = inbuf;
-    int i = 0;
-    vector<char*> input;
-    while ((token = strtok_r(rest, "#", &rest))) 
-    {
-        input.push_back(token);
-    }
+    vector<char*> input = split(inbuf);
 
     vector <string> dir = subdire_or_files(input[2]);
+
+    for(int i=0; i<dir.size(); i++){
+        string fifo(input[1]);
+        fifo.append(to_string(i));
+        char *myfifo = &fifo[0];
+        mkfifo(myfifo, 0666);
+
+        string msg(input[0]);
+        msg.append("#");
+        string f(myfifo);
+        msg.append(f);
+        msg.append("#");
+        msg.append(input[2]);
+        msg.append("/");
+        msg.append(dir[i]);
+        char* msg1 = &msg[0];
+        
+        pass_to_unnamed_pipe(msg1,"./province.out");
+    }
     
     return 0;
 }

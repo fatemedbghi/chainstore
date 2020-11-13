@@ -48,7 +48,7 @@ void pass_to_unnamed_pipe(char *msg,string argc)
         // close(p[0]);
         if (write(p[1], msg, MSGSIZE) < 0) cout<<"write failed"<<endl;
         close(p[1]);
-        wait(NULL);
+        // wait(NULL);
     }
 }
 

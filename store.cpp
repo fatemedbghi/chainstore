@@ -86,9 +86,16 @@ int main(int argc, char** argv)
     close(atoi(argv[0]));
 
     vector<char*> input = split(inbuf);
-    cout<<input[1]<<endl;
+    int price = command(input);
+    string s = to_string(price);
+    const char *pchar = s.c_str();
+    char kh[100];
+    strcpy(kh, pchar);
+    // mkfifo(input[1], 0666);
+    int fd = open(input[1], O_WRONLY);
+    if(fd < 0) cout << "error open province : " << strerror( errno )<< endl;
+    if (write(fd,kh,MSGSIZE)<0) cout<<"write failed\n";
+    close(fd);
 
-    cout << command(input) << endl;
-   
     return 0; 
 }

@@ -16,11 +16,14 @@
 #include <unistd.h>
 #include <dirent.h> 
 #include<sys/wait.h> 
+#include<errno.h>
 
 #define FIFO "fifo/fifo"
 #define MSGSIZE 100
 #define MAX 1
 #define MIN 0
+
+extern int errno;
 
 using namespace std;
 

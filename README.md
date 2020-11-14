@@ -1,2 +1,2 @@
-use this command to run
+use this command to run\n
 ./StoreCalculator.out commands.txt assets

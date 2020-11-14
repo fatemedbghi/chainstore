@@ -105,6 +105,7 @@ vector<int> gather_prices(vector<string> fifo_arr, int n)
         int temp = atoi(str);
         prices.push_back(temp);
         close(fd);
+        unlink(&fifo_arr[i][0]);
     }
     return prices;
 }

@@ -38,7 +38,6 @@ void pass_to_unnamed_pipe(char *msg,string argc)
         exit(1);
     }
     else if (pid == 0) {
-        // close(p[0]);
         close(p[1]);
         string s = to_string(p[0]);
         char *pchar = &s[0]; 
@@ -46,10 +45,8 @@ void pass_to_unnamed_pipe(char *msg,string argc)
         execv(arg, argv);
     }
     else {
-        // close(p[0]);
         if (write(p[1], msg, MSGSIZE) < 0) cout<<"write failed"<<endl;
         close(p[1]);
-        // wait(NULL);
     }
 }
 
@@ -83,9 +80,7 @@ int find_min_or_max(vector<int> prices) {
 
 void pass_to_named_pipe(char *name, int price)
 {
-    // cout<<"before open\n";
     int fd = open(name, O_WRONLY);
-    // cout<<"after open\n";
     string s = to_string(price);
     const char *pchar = s.c_str();
     char kh[100];
@@ -102,9 +97,7 @@ vector<int> gather_prices(vector<string> fifo_arr, int n)
 {
     vector<int> prices;
     for(int i=0; i<n; i++){
-        // cout<<"before open " << fifo_arr[i]<<endl;
         int fd = open(&fifo_arr[i][0],O_RDONLY);
-        // cout<<"after open " << fifo_arr[i]<<endl;
         if(fd < 0) cout << "read open error  : " << strerror( errno )<< endl;
         char str[MSGSIZE];
         int why = read(fd, str, MSGSIZE);
@@ -114,4 +107,30 @@ vector<int> gather_prices(vector<string> fifo_arr, int n)
         close(fd);
     }
     return prices;
+}
+
+
+vector<string> create_fifo(vector<char*> input,vector <string> dir,string argc)
+{
+    vector<string> fifo_arr;
+    for(int i=0; i<dir.size(); i++){
+        string fifo(input[1]);
+        fifo.append(to_string(i));
+        char *myfifo = &fifo[0];
+        fifo_arr.push_back(fifo);
+        mkfifo(myfifo, 0666);
+
+        string msg(input[0]);
+        msg.append("#");
+        string f(myfifo);
+        msg.append(f);
+        msg.append("#");
+        msg.append(input[2]);
+        msg.append("/");
+        msg.append(dir[i]);
+        char* msg1 = &msg[0];
+        
+        pass_to_unnamed_pipe(msg1,argc);
+    }
+    return fifo_arr;
 }

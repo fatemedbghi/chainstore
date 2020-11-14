@@ -1,5 +1,3 @@
-// ‫‪./StoreCalculator.out‬‬ ‫‪commands.txt‬‬ ‫‪assets‬‬
-
 #include "tools.h"
 
 using namespace std;
@@ -42,7 +40,6 @@ int main(int argc, char** argv)
         if (prices[j] == -1) cout<<prices[j]<<endl;
         else cout<<prices[j]/10<<endl;
     }
-    
     
     return 0;
 }

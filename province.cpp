@@ -13,11 +13,13 @@ int main(int argc, char** argv)
     
     vector<char*> input = split(inbuf);
     vector <string> dir = subdire_or_files(input[2]);
+    vector<char*> fifo_arr;
 
     for(int i=0; i<dir.size(); i++){
         string fifo(input[1]);
         fifo.append(to_string(i));
         char *myfifo = &fifo[0];
+        fifo_arr.push_back(myfifo);
         mkfifo(myfifo, 0666);
 
         string msg(input[0]);
@@ -32,5 +34,8 @@ int main(int argc, char** argv)
         
         pass_to_unnamed_pipe(msg1,"./city.out");
     }
+    vector<int> prices = gather_prices(fifo_arr, dir.size());
+    int price = find_min_or_max(prices);
+    pass_to_named_pipe(input[1], price);
     return 0;
 }

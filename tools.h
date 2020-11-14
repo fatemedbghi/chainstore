@@ -32,5 +32,6 @@ void pass_to_unnamed_pipe(char *msg,string argc);
 vector<char*> split(char inbuf[MSGSIZE]);
 int find_min_or_max(vector<int> prices);
 void pass_to_named_pipe(char *name, int price);
+vector<int> gather_prices(vector<char*> fifo_arr, int n);
 
 #endif

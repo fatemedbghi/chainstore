@@ -32,6 +32,7 @@ void pass_to_unnamed_pipe(char *msg,string argc)
     int p[2];
     if (pipe(p) < 0) cout<<"pipe faild\n";
     pid_t pid = fork();
+    int fd;
     if (pid < 0) {
         cout << "fork faild.\n";
         exit(1);
@@ -70,7 +71,7 @@ int find_min_or_max(vector<int> prices) {
         if (prices[i] != -1) 
         {
             flag = prices[i]%10;
-            temp.push_back(prices[i]/10);
+            temp.push_back(prices[i]);
         }
     }
     if (temp.size() != 0){
@@ -82,13 +83,35 @@ int find_min_or_max(vector<int> prices) {
 
 void pass_to_named_pipe(char *name, int price)
 {
+    // cout<<"before open\n";
+    int fd = open(name, O_WRONLY);
+    // cout<<"after open\n";
     string s = to_string(price);
     const char *pchar = s.c_str();
     char kh[100];
     strcpy(kh, pchar);
-    int fd = open(name, O_WRONLY);
-    if(fd < 0) cout << "error : " << strerror( errno )<< endl;
-    if (write(fd,kh,MSGSIZE)<0) cout<<"write failed\n";
+    if(fd < 0) {
+        cout <<"write open error : " << strerror( errno )<< endl;
+        exit(0);
+    }
+    if (write(fd,kh,MSGSIZE) < 0) cout<<"write failed\n";
     close(fd);
-    cout<<"why"<<endl;
+}
+
+vector<int> gather_prices(vector<char*> fifo_arr, int n)
+{
+    vector<int> prices;
+    for(int i=0; i<n; i++){
+        cout<<"before open\n";
+        int fd = open(fifo_arr[i],O_RDONLY);
+        cout<<"after open\n";
+        if(fd < 0) cout << "read open error  : " << strerror( errno )<< endl;
+        char str[MSGSIZE];
+        int why = read(fd, str, MSGSIZE);
+        if (why < 0) cout <<"read error  : " << strerror( errno )<< endl;
+        int temp = atoi(str);
+        prices.push_back(temp);
+        close(fd);
+    }
+    return prices;
 }

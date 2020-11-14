@@ -89,8 +89,8 @@ int main(int argc, char** argv)
 
     vector<char*> input = split(inbuf);
     int price = command(input);
-
     pass_to_named_pipe(input[1], price);
+    cout <<input[2]<<"   "<<price<< endl;
 
     return 0; 
 }

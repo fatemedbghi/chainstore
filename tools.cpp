@@ -98,13 +98,13 @@ void pass_to_named_pipe(char *name, int price)
     close(fd);
 }
 
-vector<int> gather_prices(vector<char*> fifo_arr, int n)
+vector<int> gather_prices(vector<string> fifo_arr, int n)
 {
     vector<int> prices;
     for(int i=0; i<n; i++){
-        cout<<"before open\n";
-        int fd = open(fifo_arr[i],O_RDONLY);
-        cout<<"after open\n";
+        // cout<<"before open " << fifo_arr[i]<<endl;
+        int fd = open(&fifo_arr[i][0],O_RDONLY);
+        // cout<<"after open " << fifo_arr[i]<<endl;
         if(fd < 0) cout << "read open error  : " << strerror( errno )<< endl;
         char str[MSGSIZE];
         int why = read(fd, str, MSGSIZE);

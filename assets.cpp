@@ -14,13 +14,13 @@ int main(int argc, char** argv)
 
     vector<char*> input = split(inbuf);
     vector <string> dir = subdire_or_files(input[2]);
-    vector<char*> fifo_arr;
+    vector<string> fifo_arr;
 
     for(int i=0; i<dir.size(); i++){
         string fifo(input[1]);
         fifo.append(to_string(i));
         char *myfifo = &fifo[0];
-        fifo_arr.push_back(myfifo);
+        fifo_arr.push_back(fifo);
         mkfifo(myfifo, 0666);
 
         string msg(input[0]);

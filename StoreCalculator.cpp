@@ -16,14 +16,14 @@ int main(int argc, char** argv)
         i++;
     }
 
-    vector<char*> fifo_arr;
+    vector<string> fifo_arr;
 
     for (int j=0; j<i;j++){
 
         string temp = FIFO;
         temp.append(to_string(j)); 
         char *myfifo = &temp[0];
-        fifo_arr.push_back(myfifo);
+        fifo_arr.push_back(temp);
         mkfifo(myfifo, 0666);
 
         string msg = command[j];

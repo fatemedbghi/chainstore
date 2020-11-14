@@ -13,13 +13,13 @@ int main(int argc, char** argv)
 
     vector<char*> input = split(inbuf);
     vector <string> dir = subdire_or_files(input[2]);
-    vector<char*> fifo_arr;
+    vector<string> fifo_arr;
     
     for(int i=0; i<dir.size(); i++){
         string fifo(input[1]);
         fifo.append(to_string(i));
         char *myfifo = &fifo[0];
-        fifo_arr.push_back(myfifo);
+        fifo_arr.push_back(fifo);
         mkfifo(myfifo, 0666);
 
         string msg(input[0]);
@@ -37,7 +37,6 @@ int main(int argc, char** argv)
     }
     vector<int> prices = gather_prices(fifo_arr, dir.size());
     int price = find_min_or_max(prices);
-    cout<<price<<endl;
     pass_to_named_pipe(input[1], price);
 
     return 0;

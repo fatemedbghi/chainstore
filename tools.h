@@ -33,6 +33,6 @@ vector<char*> split(char inbuf[MSGSIZE]);
 int find_min_or_max(vector<int> prices);
 void pass_to_named_pipe(char *name, int price);
 vector<int> gather_prices(vector<string> fifo_arr, int n);
-vector<string> create_fifo(vector<char*> input,vector <string> dir,string argc);
+vector<string> create_fifo(vector<char*> input,vector <string> dir,string argc,string wherefrom);
 
 #endif

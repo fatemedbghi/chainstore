@@ -65,16 +65,17 @@ int find_min_or_max(vector<int> prices) {
     vector <int> temp;
     int flag;
     for (int i=0;i<prices.size();i++) {
-        if (prices[i] != -1) 
+        if (prices[i] != -1)
         {
             flag = prices[i]%10;
             temp.push_back(prices[i]);
         }
     }
     if (temp.size() != 0){
-        if (flag == 0) return *min_element(prices.begin(), prices.end());
-        if (flag == 1) return *max_element(prices.begin(), prices.end());
+        if (flag == 0) return *min_element(temp.begin(), temp.end());
+        if (flag == 1) return *max_element(temp.begin(), temp.end());
     }
+    temp.clear();
     return -1;
 }
 
@@ -85,11 +86,7 @@ void pass_to_named_pipe(char *name, int price)
     const char *pchar = s.c_str();
     char kh[100];
     strcpy(kh, pchar);
-    if(fd < 0) {
-        cout <<"write open error : " << strerror( errno )<< endl;
-        exit(0);
-    }
-    if (write(fd,kh,MSGSIZE) < 0) cout<<"write failed\n";
+    write(fd,kh,MSGSIZE);
     close(fd);
 }
 
@@ -98,10 +95,8 @@ vector<int> gather_prices(vector<string> fifo_arr, int n)
     vector<int> prices;
     for(int i=0; i<n; i++){
         int fd = open(&fifo_arr[i][0],O_RDONLY);
-        if(fd < 0) cout << "read open error  : " << strerror( errno )<< endl;
         char str[MSGSIZE];
-        int why = read(fd, str, MSGSIZE);
-        if (why < 0) cout <<"read error  : " << strerror( errno )<< endl;
+        read(fd, str, MSGSIZE);
         int temp = atoi(str);
         prices.push_back(temp);
         close(fd);
@@ -111,11 +106,12 @@ vector<int> gather_prices(vector<string> fifo_arr, int n)
 }
 
 
-vector<string> create_fifo(vector<char*> input,vector <string> dir,string argc)
+vector<string> create_fifo(vector<char*> input,vector <string> dir,string argc,string wherefrom)
 {
     vector<string> fifo_arr;
     for(int i=0; i<dir.size(); i++){
         string fifo(input[1]);
+        fifo.append(wherefrom);
         fifo.append(to_string(i));
         char *myfifo = &fifo[0];
         fifo_arr.push_back(fifo);

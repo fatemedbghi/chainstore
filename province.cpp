@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     
     vector<char*> input = split(inbuf);
     vector <string> dir = subdire_or_files(input[2]);
-    vector <string> fifo_arr = create_fifo(input,dir,"./city.out");
+    vector <string> fifo_arr = create_fifo(input,dir,"./city.out","province");
    
     vector<int> prices = gather_prices(fifo_arr, dir.size());
     int price = find_min_or_max(prices);
